@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<!-- saved from url=(0153)file:///Users/lijiaxu/Downloads/%E7%94%B5%E5%AD%90%E6%8E%A8%E6%9D%86%E8%B0%83%E7%A0%94/%E6%B8%85%E9%97%B2OC1Pro_%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A.html -->
+<html lang="zh-CN" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清闲 OC1 Pro 用户调研报告</title>
+<style>
+:root{
+  color-scheme: light;
+  --plane:#f9f9f7;  --surface:#fcfcfb;  --surface-2:#f2f2ee;
+  --ink:#0b0b0b;    --ink-2:#52514e;    --muted:#898781;
+  --grid:#e1e0d9;   --axis:#c3c2b7;
+  --series-1:#2a78d6; --series-2:#eb6834;
+  --s-good:#0ca30c; --s-warn:#fab219; --s-serious:#ec835a; --s-critical:#d03b3b;
+  --border:rgba(11,11,11,0.10);
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+  --accent:#2a78d6;
+  --font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0d0d0d;  --surface:#1a1a19;  --surface-2:#222221;
+  --ink:#f0efec;    --ink-2:#c3c2b7;    --muted:#898781;
+  --grid:#2c2c2a;   --axis:#383835;
+  --series-1:#3987e5; --series-2:#d95926;
+  --s-good:#0ca30c; --s-warn:#fab219; --s-serious:#ec835a; --s-critical:#d03b3b;
+  --border:rgba(255,255,255,0.10);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  --accent:#3987e5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--plane);color:var(--ink);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;overflow:hidden;font-size:15px;line-height:1.65}
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:60;transition:width .25s ease}
+#deck{height:100vh;width:100vw;position:relative}
+.slide{position:absolute;inset:0;display:none;padding:48px 60px 80px;overflow-y:auto;overscroll-behavior:contain}
+.slide.active{display:block;animation:in .3s cubic-bezier(.22,.8,.3,1)}
+@keyframes in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+#hud{position:fixed;bottom:0;left:0;right:0;height:50px;z-index:50;
+  background:linear-gradient(to top,var(--plane) 55%,transparent);
+  display:flex;align-items:center;justify-content:space-between;padding:0 60px}
+#dots{display:flex;gap:7px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--axis);border:0;cursor:pointer;padding:0;transition:.2s}
+.dot:hover{background:var(--muted)}
+.dot.on{background:var(--accent);width:20px;border-radius:4px}
+#pager{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+#themebtn{border:1px solid var(--border);background:var(--surface);color:var(--ink-2);
+  border-radius:8px;padding:4px 10px;font-size:12.5px;cursor:pointer;font-family:var(--font)}
+#themebtn:hover{border-color:var(--muted)}
+
+h1{font-size:clamp(30px,3.5vw,44px);line-height:1.18;letter-spacing:-.022em;font-weight:680}
+h2{font-size:clamp(21px,2vw,27px);line-height:1.28;letter-spacing:-.018em;font-weight:660;margin-bottom:6px}
+h3{font-size:15px;font-weight:640;letter-spacing:-.01em;margin-bottom:9px}
+.eyebrow{font-size:11.5px;font-weight:640;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.eyebrow::after{content:"";height:1px;flex:1;background:var(--border)}
+.sub{color:var(--ink-2);font-size:14px;max-width:80ch}
+.slide-head{margin-bottom:24px}
+
+.cover{display:flex;flex-direction:column;justify-content:center;height:100%;max-width:1000px}
+.cover .tag{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-size:12.5px;
+  color:var(--ink-2);background:var(--surface);margin-bottom:26px}
+.cover .tag b{color:var(--accent);font-weight:640}
+.cover h1{margin-bottom:18px}
+.cover h1 em{font-style:normal;color:var(--accent)}
+.cover .meta{margin-top:34px;padding-top:22px;border-top:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px}
+.cover .meta div span{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:5px}
+.cover .meta div b{font-weight:600;font-size:13.5px;color:var(--ink)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow)}
+.kpi .v{font-size:25px;font-weight:660;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:12px;color:var(--ink-2);margin-top:5px}
+.kpi .n{font-size:11px;color:var(--muted);margin-top:2px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cols-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:1080px){.cols,.cols-3,.cols-4{grid-template-columns:1fr}}
+
+.prod{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.prod .imgbox{height:min(46vh,400px);background:var(--surface-2);display:flex;align-items:center;justify-content:center;padding:12px}
+.prod .imgbox img{max-width:100%;max-height:100%;object-fit:contain;display:block;border-radius:6px}
+.prod .prodinfo{padding:11px 14px 14px;border-top:1px solid var(--border)}
+.prod .prodinfo b{font-size:14px;display:block;margin-bottom:2px}
+.prod .prodinfo .price{font-size:16px;font-weight:660;color:var(--accent);font-variant-numeric:tabular-nums;display:block;margin:3px 0 8px}
+.prod .prodinfo ul{list-style:none;font-size:12px;color:var(--ink-2);line-height:1.6}
+.prod .prodinfo ul li{padding-left:10px;position:relative}
+.prod .prodinfo ul li::before{content:"·";position:absolute;left:0;color:var(--muted)}
+.prod .tagline{display:inline-block;font-size:11px;font-weight:640;border-radius:5px;padding:1px 7px;margin-bottom:6px;
+  background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.prod.base{border-color:color-mix(in srgb,var(--accent) 42%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 20%,transparent),var(--shadow)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.card.soft{background:var(--surface-2);box-shadow:none}
+.card + .card{margin-top:13px}
+.stack > * + *{margin-top:13px}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:640;color:var(--muted);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;padding:0 9px 7px 0;border-bottom:1px solid var(--axis);white-space:nowrap}
+td{padding:6px 9px 6px 0;border-bottom:1px solid var(--grid);vertical-align:middle;color:var(--ink-2)}
+td:first-child{color:var(--ink);font-weight:560}
+tr:last-child td{border-bottom:0}
+.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.hi-row td{background:color-mix(in srgb, var(--s-critical) 6%, transparent)}
+
+.mini{display:inline-block;height:9px;background:var(--series-1);border-radius:0 3px 3px 0;vertical-align:middle}
+.mini.bad{background:var(--s-critical)}
+.barcell{display:flex;align-items:center;gap:7px}
+.bartrack{flex:1;min-width:40px;background:var(--surface-2);border-radius:0 3px 3px 0;height:9px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:640;
+  border-radius:5px;padding:1.5px 7px;white-space:nowrap;border:1px solid var(--border);
+  background:var(--surface-2);color:var(--ink-2)}
+.badge.p0{background:color-mix(in srgb, var(--s-critical) 14%, transparent);color:var(--s-critical);border-color:color-mix(in srgb, var(--s-critical) 34%, transparent)}
+.badge.p1{background:color-mix(in srgb, var(--s-serious) 20%, transparent);color:color-mix(in srgb, var(--s-serious) 80%, var(--ink));border-color:color-mix(in srgb, var(--s-serious) 36%, transparent)}
+.badge.p2{background:color-mix(in srgb, var(--s-warn) 22%, transparent);color:color-mix(in srgb, var(--s-warn) 58%, var(--ink));border-color:color-mix(in srgb, var(--s-warn) 40%, transparent)}
+.badge.ok{background:color-mix(in srgb, var(--s-good) 14%, transparent);color:var(--s-good);border-color:color-mix(in srgb, var(--s-good) 32%, transparent)}
+
+details{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:0 14px;margin-top:9px}
+details > summary{cursor:pointer;font-size:12.5px;font-weight:600;padding:10px 0;list-style:none;
+  display:flex;align-items:center;gap:8px;color:var(--ink-2)}
+details > summary::-webkit-details-marker{display:none}
+details > summary::before{content:"▸";color:var(--muted);font-size:11px;display:inline-block;transition:.15s}
+details[open] > summary::before{transform:rotate(90deg)}
+details .body{padding:2px 0 13px;font-size:13px;color:var(--ink-2)}
+.q{border-left:2px solid var(--s-critical);padding:2px 0 2px 11px;font-size:12.5px;
+  color:var(--ink-2);margin:7px 0;line-height:1.6}
+.q.v{border-left-color:var(--s-good)}
+.q.n{border-left-color:var(--axis)}
+.qsrc{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.callout{border-radius:11px;padding:13px 17px;font-size:13.5px;line-height:1.62;
+  background:color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border:1px solid color-mix(in srgb, var(--accent) 25%, transparent)}
+.callout b{color:var(--accent)}
+.callout.n{border-radius:11px;padding:13px 17px;font-size:13.5px;
+  background:var(--surface-2);border:1px solid var(--border)}
+.callout.n b{color:var(--ink)}
+.src{font-size:11.5px;color:var(--muted);margin-top:20px;padding-top:11px;border-top:1px solid var(--border)}
+.hl{background:color-mix(in srgb, var(--s-warn) 32%, transparent);border-radius:3px;padding:0 2px;color:var(--ink)}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:7px 0 7px 30px;font-size:13.5px;color:var(--ink-2);border-bottom:1px solid var(--grid)}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:19px;height:19px;
+  border-radius:50%;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);
+  font-size:11px;font-weight:640;display:flex;align-items:center;justify-content:center}
+ol.steps li b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="progress" style="width: 7.14286%;"></div>
+<main id="deck">
+
+<!-- ===== 1 封面 ===== -->
+<section class="slide active">
+  <div class="cover">
+    <div class="tag">用户调研报告 · <b>第 1 版</b></div>
+    <h1>清闲 OC1 Pro<br>用户怎么说 — <em>数据版</em></h1>
+    <p class="sub" style="font-size:15px">
+      本报告全部结论由用户原声的<b>出现频次</b>得出，不加入主观推断。<br>
+      每一条结论都可以回溯到具体条数与数据来源。
+    </p>
+    <div class="meta">
+      <div><span>调研对象</span><b>清闲 OC1 Pro 人体工学椅</b></div>
+      <div><span>对比对象</span><b>黑白调 T8 Max · 西昊 H300 Pro · 傲风 S7</b></div>
+      <div><span>总样本</span><b>7,243 条用户反馈</b></div>
+      <div><span>时间跨度</span><b>2025-07 ~ 2026-10</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2 数据来源与统计方法 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 1 部分 · 方法与口径</div>
+    <h2>数据从哪来，数字怎么算的</h2>
+    <p class="sub">所有频次都只统计"有多少条用户反馈提到了这件事"，不判断褒贬倾向，避免主观加工。</p>
+  </div>
+
+  <div class="cols">
+    <div class="stack">
+      <div class="card">
+        <h3>数据来源（共 7,243 条）</h3>
+        <table>
+          <thead><tr><th>数据源</th><th class="num">条数</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>清闲 平台评价</td><td class="num">5,000</td><td>含初评与追评，时间 2025-07 ~ 2026-10</td></tr>
+            <tr><td>清闲 问大家</td><td class="num">377</td><td>买家问答，反映"买前最关心什么"</td></tr>
+            <tr><td>清闲 小红书评论</td><td class="num">658</td><td>10 篇笔记下的去重评论</td></tr>
+            <tr><td>清闲 亚马逊评价</td><td class="num">16</td><td>美国站</td></tr>
+            <tr><td>黑白调 T8 Max 评价</td><td class="num">182</td><td>含初评与追评</td></tr>
+            <tr><td>黑白调 小红书评论</td><td class="num">685</td><td>12 篇笔记下的去重评论</td></tr>
+            <tr><td>西昊 小红书评论</td><td class="num">308</td><td>7 篇笔记下的去重评论</td></tr>
+            <tr><td>竞品 问大家</td><td class="num">17</td><td>黑白调 10 条 + 傲风 7 条</td></tr>
+            <tr><td>官方商品页资料</td><td class="num">—</td><td>产品参数、结构与卖点（非用户反馈）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout n">
+        <b>为什么用"频次"而不是"评价好坏"</b><br>
+        一条评价里既可能有表扬也可能有抱怨。为了不靠人工判断，本报告只统计
+        <b>"有多少条反馈提到了某件事"</b>，再单独看这件事<b>有多少条出现在差评里</b>。
+        两条线索交叉，就能客观区分"热度高但没什么人抱怨"和"热度高且集中在差评"。
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>三条统计规则</h3>
+        <ol class="steps">
+          <li><b>一条反馈只计一次。</b>一条评价里"热"出现 5 次，仍只算 1 条提到"热"。</li>
+          <li><b>差评集中度基准线 = 1.42%。</b>5,000 条评价里差评占 1.42%。某话题若<b>在差评中的占比明显高于 1.42%</b>，说明它更容易引发差评；低于则说明主要出现在好评里。</li>
+          <li><b>关键词表公开可复现。</b>每个话题对应一组关键词，页面下方可展开查看。</li>
+        </ol>
+      </div>
+      <div class="card soft">
+        <h3>三条已知局限（先说清楚）</h3>
+        <ol class="steps">
+          <li><b>关键词匹配不含语义。</b>"不闷"和"很闷"都会被计入"闷"这一项，所以提及数不等于抱怨数 —— 这是为什么每一行都要另看"差评占比"。</li>
+          <li><b>好评里存在模板化内容。</b>抽样中发现"这款电竞椅的坐垫采用记忆皮材质"这类与产品不符的表述，因此 <b>98.10% 的好评率不宜直接采信</b>，本报告的结论优先采信差评、问大家与站外三类来源的交叉结果。</li>
+          <li><b>站外样本偏小且有选择性。</b>658 条评论来自 10 篇笔记，只代表"关注这些笔记的人"，不能代表全部用户。</li>
+        </ol>
+      </div>
+      <details>
+        <summary>展开：本次使用的关键词表</summary>
+        <div class="body">
+          <table>
+            <thead><tr><th style="width:130px">话题</th><th>判定关键词</th></tr></thead>
+            <tbody>
+              <tr><td>热 / 闷</td><td>热、闷</td></tr>
+              <tr><td>透气</td><td>透气</td></tr>
+              <tr><td>通风 / 散热</td><td>通风、风扇、吸风、散热</td></tr>
+              <tr><td>腰托</td><td>腰托、腰靠、腰撑</td></tr>
+              <tr><td>头枕</td><td>头枕、颈枕</td></tr>
+              <tr><td>坐垫</td><td>坐垫</td></tr>
+              <tr><td>坐深 / 坐垫长度</td><td>坐深、座深</td></tr>
+              <tr><td>座高</td><td>坐高、座高、踩不到、够不到地、够不着地</td></tr>
+              <tr><td>异响</td><td>异响、咯吱、嘎吱、吱吱</td></tr>
+              <tr><td>气味</td><td>气味、味道、异味</td></tr>
+              <tr><td>电池 / 充电</td><td>电池、充电、续航</td></tr>
+              <tr><td>电动调节</td><td>电动、电控、一键</td></tr>
+              <tr><td>拉伸</td><td>拉伸</td></tr>
+              <tr><td>脚踏</td><td>脚踏、脚凳、脚垫、脚托</td></tr>
+              <tr><td>轮子</td><td>轮子、滑轮、滚轮</td></tr>
+              <tr><td>客服 / 售后</td><td>客服、售后</td></tr>
+              <tr><td>物流</td><td>物流、快递、发货</td></tr>
+              <tr><td>价格 / 差价</td><td>差价、保价、降价、买贵</td></tr>
+              <tr><td>赠品 / 活动</td><td>赠品、晒单、返现、半价</td></tr>
+              <tr><td>退换货 / 运费</td><td>退货、退款、运费</td></tr>
+              <tr><td>做工 / 材质感</td><td>塑料、做工、质感、毛刺、飞边、割手、粗糙、廉价</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3 产品概况 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 2 部分 · 产品概况</div>
+    <h2>被调研的这把椅子是什么</h2>
+    <p class="sub">以下为官方商品页公开信息，用于理解后续用户反馈指向的具体部件。</p>
+  </div>
+
+  <div class="cols">
+    <div class="stack">
+      <div class="card">
+        <h3>基本信息</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:82px">产品</td><td>清闲 OC1 Pro（海外名 Libernovo Omni Pro）</td></tr>
+            <tr><td>活动价</td><td>¥4,299；日常价 ¥3,799；用户实际成交价区间 <b>¥3,150 – ¥3,899</b></td></tr>
+            <tr><td>官方适配</td><td>身高 153–186cm；承重 ≤136kg</td></tr>
+            <tr><td>座深</td><td><b>不可调</b>，购买时在 45cm / 48cm 中二选一</td></tr>
+            <tr><td>椅背高度</td><td><b>不可调</b></td></tr>
+            <tr><td>后仰档位</td><td>5 档：105° / 115° / 125° / 135° / 160°（无前倾办公档）</td></tr>
+            <tr><td>面料</td><td>丹麦 Gabriel 面料，耐磨 11 万次</td></tr>
+            <tr><td>发货</td><td>整装发货，免安装，海外分 2 个包裹</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card soft">
+        <h3>产品线（3 个版本）</h3>
+        <table>
+          <thead><tr><th>配置</th><th class="num">Pro</th><th class="num">OC1 焕新</th><th class="num">S1</th></tr></thead>
+          <tbody>
+            <tr><td>电动腰托 + 联动跟随</td><td class="num">●</td><td class="num">●</td><td class="num">●</td></tr>
+            <tr><td>腰背拉伸功能</td><td class="num">●</td><td class="num">●</td><td class="num">—</td></tr>
+            <tr><td><b>座垫主动通风</b></td><td class="num">●</td><td class="num">—</td><td class="num">—</td></tr>
+            <tr><td>参考价</td><td class="num">¥4,299</td><td class="num">¥3,xxx</td><td class="num">约 ¥1,900</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>四个核心部件（后续反馈会反复指向它们）</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:104px"><b>电动腰托</b></td><td>腰部有一根可电动伸缩的支撑件，行程 <b>50mm</b>，方向<b>斜向上</b>。作用是改变椅背的弯曲形状，让腰靠贴合不同人的脊柱。扶手上有按钮控制。</td></tr>
+            <tr><td><b>椅背</b></td><td>由 8 块柔性板拼成，两侧有 14 个连接点、16 个球形支点，可随身体形状变形。</td></tr>
+            <tr><td><b>座垫通风</b></td><td>座垫内部装了一个 4,000 转/分的风扇，<b>吸气式（往地面排风，不是吹风）</b>，两档风力，人离开自动停。<b>只有座垫有，椅背没有。</b></td></tr>
+            <tr><td><b>供电</b></td><td>用一块可拆的电池，Type-C 充电，官方称舒适档续航 36 小时、强力档 9 小时。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout n">
+        <h3>其他可调项</h3>
+        <table style="margin-top:4px">
+          <tbody>
+            <tr><td style="width:88px">扶手</td><td>前后 10cm、左右旋转 10°、上翘 40°、上下约 10cm</td></tr>
+            <tr><td>头枕</td><td>上扬 37°、前后 9cm、上下 12cm，可拆卸</td></tr>
+            <tr><td>座高</td><td>升降约 11cm</td></tr>
+            <tr><td>脚踏</td><td>独立的一个（<b>与椅子分开</b>），两种高度</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="src">来源：清闲官方商品页与主图资料</div>
+</section>
+
+<!-- ===== 4 评价总览 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 3 部分 · 评价总览</div>
+    <h2>5,000 条评价说了什么：热度排行</h2>
+    <p class="sub">下表为全部 5,000 条评价中，各话题被提及的条数，以及这些提及中有多少条出现在差评里。</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v" style="color:var(--s-good)">4,905</div><div class="l">好评</div><div class="n">98.10%</div></div>
+    <div class="kpi"><div class="v" style="color:var(--s-warn)">24</div><div class="l">中评</div><div class="n">0.48%</div></div>
+    <div class="kpi"><div class="v" style="color:var(--s-critical)">71</div><div class="l">差评</div><div class="n">1.42%</div></div>
+    <div class="kpi"><div class="v">51<span style="font-size:14px"> / 71</span></div><div class="l">差评中含服务或交易类问题</div><div class="n">占差评 71.8%</div></div>
+    <div class="kpi"><div class="v">20<span style="font-size:14px"> / 71</span></div><div class="l">差评中纯产品问题</div><div class="n">占差评 28.2%</div></div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>话题热度排行（按提及条数）</h3>
+      <table>
+        <thead><tr><th style="width:118px">话题</th><th colspan="2" class="num" style="width:34%">提及条数</th><th class="num">占比</th><th class="num">其中差评</th><th class="num">差评占比</th></tr></thead>
+        <tbody>
+          <tr><td>久坐 / 长时间</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:100%"></div></div></div></td><td class="num">888</td><td class="num">17.8%</td><td class="num">2</td><td class="num">0.2%</td></tr>
+          <tr><td>做工 / 材质感</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:69%"></div></div></div></td><td class="num">615</td><td class="num">12.3%</td><td class="num">16</td><td class="num">2.6%</td></tr>
+          <tr class="hi-row"><td>热 / 闷</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:66%"></div></div></div></td><td class="num">588</td><td class="num">11.8%</td><td class="num">10</td><td class="num">1.7%</td></tr>
+          <tr><td>外观 / 颜值 / 颜色</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:60%"></div></div></div></td><td class="num">532</td><td class="num">10.6%</td><td class="num">5</td><td class="num">0.9%</td></tr>
+          <tr class="hi-row"><td>坐垫</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:59%"></div></div></div></td><td class="num">520</td><td class="num">10.4%</td><td class="num">14</td><td class="num">2.7%</td></tr>
+          <tr><td>结实 / 稳固 / 质感</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:56%"></div></div></div></td><td class="num">498</td><td class="num">10.0%</td><td class="num">0</td><td class="num">0%</td></tr>
+          <tr><td>头枕 / 颈枕</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:55%"></div></div></div></td><td class="num">484</td><td class="num">9.7%</td><td class="num">5</td><td class="num">1.0%</td></tr>
+          <tr><td>通风 / 散热</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:52%"></div></div></div></td><td class="num">462</td><td class="num">9.2%</td><td class="num">5</td><td class="num">1.1%</td></tr>
+          <tr><td>躺 / 午休 / 小憩</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:49%"></div></div></div></td><td class="num">434</td><td class="num">8.7%</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td>安装 / 组装</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:45%"></div></div></div></td><td class="num">398</td><td class="num">8.0%</td><td class="num">2</td><td class="num">0.5%</td></tr>
+          <tr class="hi-row"><td>腰托 / 腰靠</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:38%"></div></div></div></td><td class="num">336</td><td class="num">6.7%</td><td class="num">3</td><td class="num">0.9%</td></tr>
+          <tr><td>拉伸功能</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:31%"></div></div></div></td><td class="num">271</td><td class="num">5.4%</td><td class="num">4</td><td class="num">1.5%</td></tr>
+          <tr class="hi-row"><td>气味 / 味道</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:31%"></div></div></div></td><td class="num">271</td><td class="num">5.4%</td><td class="num">4</td><td class="num">1.5%</td></tr>
+          <tr><td>脚踏</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:30%"></div></div></div></td><td class="num">267</td><td class="num">5.3%</td><td class="num">3</td><td class="num">1.1%</td></tr>
+          <tr class="hi-row"><td>透气</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:28%"></div></div></div></td><td class="num">248</td><td class="num">5.0%</td><td class="num">5</td><td class="num">2.0%</td></tr>
+          <tr class="hi-row"><td>物流 / 发货</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:26%"></div></div></div></td><td class="num">229</td><td class="num">4.6%</td><td class="num">7</td><td class="num">3.1%</td></tr>
+          <tr><td>电动调节</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:24%"></div></div></div></td><td class="num">212</td><td class="num">4.2%</td><td class="num">4</td><td class="num">1.9%</td></tr>
+          <tr class="hi-row"><td>客服 / 售后</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:19%"></div></div></div></td><td class="num">166</td><td class="num">3.3%</td><td class="num"><b>29</b></td><td class="num"><b>17.5%</b></td></tr>
+          <tr><td>轮子</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:17%"></div></div></div></td><td class="num">148</td><td class="num">3.0%</td><td class="num">4</td><td class="num">2.7%</td></tr>
+          <tr class="hi-row"><td>电池 / 充电</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:14%"></div></div></div></td><td class="num">126</td><td class="num">2.5%</td><td class="num">7</td><td class="num">5.6%</td></tr>
+          <tr><td>坐深 / 座深</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:9%"></div></div></div></td><td class="num">80</td><td class="num">1.6%</td><td class="num">1</td><td class="num">1.3%</td></tr>
+          <tr class="hi-row"><td>异响</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:5%"></div></div></div></td><td class="num">45</td><td class="num">0.9%</td><td class="num">6</td><td class="num"><b>13.3%</b></td></tr>
+          <tr class="hi-row"><td>退货 / 运费</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:5%"></div></div></div></td><td class="num">45</td><td class="num">0.9%</td><td class="num"><b>17</b></td><td class="num"><b>37.8%</b></td></tr>
+          <tr><td>塌陷 / 变形</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:4%"></div></div></div></td><td class="num">38</td><td class="num">0.8%</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr class="hi-row"><td>赠品 / 活动</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:4%"></div></div></div></td><td class="num">32</td><td class="num">0.6%</td><td class="num">9</td><td class="num"><b>28.1%</b></td></tr>
+          <tr class="hi-row"><td>价格 / 差价</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:3%"></div></div></div></td><td class="num">27</td><td class="num">0.5%</td><td class="num"><b>14</b></td><td class="num"><b>51.9%</b></td></tr>
+          <tr class="hi-row"><td>座高 / 踩不到地</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:3%"></div></div></div></td><td class="num">27</td><td class="num">0.5%</td><td class="num">3</td><td class="num"><b>11.1%</b></td></tr>
+        </tbody>
+      </table>
+      <p class="sub" style="font-size:12px;margin-top:9px;color:var(--muted)">
+        蓝色条 = 该话题主要出现在好评中；红色条 = 该话题的提及明显集中在差评中（高于 1.42% 基准线）。
+      </p>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>三个可以直接读出的事实</h3>
+        <ol class="steps">
+          <li><b>好评集中在"体验感受"上。</b>"久坐"（888 条）、"结实/稳固"（498 条）、"外观"（532 条）、"安装"（398 条）四个话题几乎全部出现在好评中，差评占比均低于 1%。</li>
+          <li><b>差评集中在"交易环节"上。</b>"客服/售后"虽然总提及只有 166 条，却有 <b>29 条来自差评</b>，差评占比 17.5%；"价格/差价" 27 条提及里 <b>14 条来自差评</b>，占比 51.9%；"退货运费"占比 37.8%。</li>
+          <li><b>产品话题里，"热"是体量最大的。</b>"热/闷"提及 588 条（11.8%），是唯一进入前五的负面倾向话题；其中 10 条来自差评，另外 155 条在好评里以"不热/不闷"的形式出现。</li>
+        </ol>
+      </div>
+      <div class="callout n">
+        <b>关于"好评率 98.10%"</b><br>
+        好评的绝对数与占比都很高，但结合"客服 29 条差评""价格 14 条差评"这类分布可以看出：
+        <b>差评主要由非产品因素驱动</b>。这意味着产品口碑与实际履约体验之间存在落差。
+      </div>
+      <details>
+        <summary>展开：评价的规格与时间分布</summary>
+        <div class="body">
+          <table>
+            <thead><tr><th>规格</th><th class="num">条数</th><th class="num">占比</th></tr></thead>
+            <tbody>
+              <tr><td>48cm 加长版</td><td class="num">3,202</td><td class="num">64.0%</td></tr>
+              <tr><td>45cm 标准版</td><td class="num">1,136</td><td class="num">22.7%</td></tr>
+              <tr><td>Pro 版本</td><td class="num">1,838</td><td class="num">36.8%</td></tr>
+              <tr><td>OC1 版本</td><td class="num">87</td><td class="num">1.7%</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:12.5px;margin-top:9px;color:var(--muted)">
+            48cm 的销量约为 45cm 的 2.8 倍，与问大家中"一律建议买加长版"的回答方向一致。
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="src">数据源：清闲 平台评价 5,000 条（好评 4,905 / 中评 24 / 差评 71）</div>
+</section>
+
+<!-- ===== 5 优点 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 4 部分 · 优点</div>
+    <h2>用户主动表扬的六件事（按提及条数排序）</h2>
+    <p class="sub">每条都标注了提及条数与数据来源。点开可看用户原话。</p>
+  </div>
+
+  <div class="cols">
+    <div class="stack">
+      <div class="card">
+        <h3>1 · 长时间坐着不难受 —— 888 条</h3>
+        <p class="sub" style="font-size:13px">"久坐 / 长时间" 在 5,000 条评价中被提及 <b>888 条（17.8%）</b>，其中仅 2 条来自差评。是全部话题里出现频率最高、且几乎不在差评中出现的表述。</p>
+        <details>
+          <summary>展开：8 条用户原话</summary>
+          <div class="body">
+            <div class="q v">连续工作一整天，腰没有以前那么酸了。<span class="qsrc">平台评价</span></div>
+            <div class="q v">坐了几个小时，腰部那种酸胀疲惫感比旧椅子减轻很多。<span class="qsrc">平台评价</span></div>
+            <div class="q v">坐了半个月，最大的感受就是腰不疼了，以前每天下班都要趴着舒缓一下，现在不需要了。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">任何单一的坐姿都会让人疲劳，但正因为我可以灵活调整，所以能够舒适地坐 8 个小时以上。<span class="qsrc">亚马逊评价（4★）</span></div>
+            <div class="q v">我打了八个小时团本感觉可以，前提是你是背靠在靠背上。<span class="qsrc">问大家</span></div>
+            <div class="q v">我使用 1 个月，简直不要太爽。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">坐感和腰撑调节都很优秀，坐了大半日没感觉屁股痛。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">我 96kg，这个电动的腰靠调节真的是心头好，各大品牌都看了，想要的就是这个功能。<span class="qsrc">问大家</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>2 · 外观好 —— 532 条</h3>
+        <p class="sub" style="font-size:13px">"外观 / 颜值 / 颜色" 提及 <b>532 条（10.6%）</b>，仅 5 条来自差评。值得注意的是，它是<b>购买理由之一</b>，而不只是加分项。</p>
+        <details>
+          <summary>展开：5 条用户原话</summary>
+          <div class="body">
+            <div class="q v">主要是颜值高，和我的桌搭比较般配。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">带我说只能说一般，我完全冲颜值买单的。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">实物的这个颜值比宣传图看着还要耐看。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">整体造型简洁颜值高。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">白色确实好看点。<span class="qsrc">小红书评论</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>3 · 头枕可调范围大 —— 484 条</h3>
+        <p class="sub" style="font-size:13px">"头枕 / 颈枕" 提及 <b>484 条（9.7%）</b>，其中好评 475 条、差评 5 条。</p>
+        <details>
+          <summary>展开：4 条用户原话</summary>
+          <div class="body">
+            <div class="q v">头枕能伸出来且高低可调，这个也很香。<span class="qsrc">问大家</span></div>
+            <div class="q v">头枕的可调范围足够使用。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">头枕可以把颈椎头部固定得稳稳当当，我一个必须侧卧入睡的人，躺平在椅子上小憩都能很快放松。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">头枕和扶手调整得当后也很有帮助。<span class="qsrc">亚马逊评价（5★）</span></div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>4 · 座垫通风有效 —— 462 条</h3>
+        <p class="sub" style="font-size:13px">"通风 / 散热" 提及 <b>462 条（9.2%）</b>，其中好评 454 条。海外评价中，这是被提到次数最多的一项功能。</p>
+        <details>
+          <summary>展开：6 条用户原话</summary>
+          <div class="body">
+            <div class="q v">我最喜欢的是它的风扇功能。一开始我以为自己用不上，但它的通风效果真的太棒了。<span class="qsrc">亚马逊评价（5★）</span></div>
+            <div class="q v">内置风扇彻底改变了游戏规则。<span class="qsrc">亚马逊评价（5★）</span></div>
+            <div class="q v">并非噱头——它确实有助于减少长时间久坐带来的闷热不适感。<span class="qsrc">亚马逊评价（5★）</span></div>
+            <div class="q v">我在广东，通风好用的，真的挺凉快。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">在空调房开启通风确实有效果，穿着短裤能明显感觉出来屁股的凉爽。<span class="qsrc">平台评价（差评中对该功能的认可）</span></div>
+            <div class="q v">座垫风扇是吸，往地面排风，算是有感比较凉爽。<span class="qsrc">问大家</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>5 · 躺 / 午休体验 —— 434 条</h3>
+        <p class="sub" style="font-size:13px">"躺 / 午休 / 小憩" 提及 <b>434 条（8.7%）</b>（已剔除规格名称中"可躺"二字的干扰）。</p>
+        <details>
+          <summary>展开：4 条用户原话</summary>
+          <div class="body">
+            <div class="q v">最舒服的是后仰，看文件二档，累了五档躺一下舒缓一下。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">五档午休刷手机巨爽。<span class="qsrc">小红书评论</span></div>
+            <div class="q v">脚踏和 160° 的后仰角度让我在等下一节课的时候也能非常舒服地放松。<span class="qsrc">亚马逊评价（5★）</span></div>
+            <div class="q v">零重力适合我这偏胖体质，睡眠质量有了进一步提升。<span class="qsrc">平台评价</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>6 · 收到即用、安装省事 —— 398 条</h3>
+        <p class="sub" style="font-size:13px">"安装 / 组装" 提及 <b>398 条（8.0%）</b>，仅 2 条来自差评。整椅装好发货，用户只需插上头枕。</p>
+        <details>
+          <summary>展开：3 条用户原话</summary>
+          <div class="body">
+            <div class="q v">整张椅子直接组装好发货，开箱装个头枕马上用。<span class="qsrc">平台评价</span></div>
+            <div class="q v">拿出来以后椅子本体只有头枕没装，开箱即用状态。<span class="qsrc">平台评价</span></div>
+            <div class="q v">安装不到 20 分钟，无需阅读说明书，只需按照图示操作即可。<span class="qsrc">亚马逊评价（5★）</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card soft">
+        <h3>7 · 电动腰托本身被认可，但提及量不高</h3>
+        <p class="sub" style="font-size:13px">
+          "电动调节" 提及 <b>212 条（4.2%）</b>，"拉伸功能" <b>271 条（5.4%）</b>。
+          对比"热/闷"的 588 条可以看出：<b>用户谈论"热"的次数是谈论"电动调节"的约 2.8 倍</b>。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="src">数据源：清闲平台评价 5,000 条 / 问大家 377 条 / 小红书 658 条 / 亚马逊 16 条</div>
+</section>
+
+<!-- ===== 6 痛点 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 5 部分 · 痛点</div>
+    <h2>71 条差评拆开看：71.8% 不是产品问题</h2>
+    <p class="sub">对全部 71 条差评逐条检查是否包含服务或交易类关键词，结果如下。</p>
+  </div>
+
+  <div class="cols">
+    <div class="stack">
+      <div class="card" style="border-color:color-mix(in srgb,var(--s-critical) 30%,transparent)">
+        <h3>A · 服务与交易类 —— 51 条（71.8%）</h3>
+        <table>
+          <thead><tr><th style="width:112px">类别</th><th class="num" style="width:64px">差评条数</th><th>用户原话摘录</th></tr></thead>
+          <tbody>
+            <tr><td><b>客服 / 售后</b></td><td class="num">29</td><td>客服只会说"抱歉哦"，不解决实际问题</td></tr>
+            <tr><td><b>退货 / 运费</b></td><td class="num">17</td><td>30 天无理由退货，但寄回运费要自己出三四百元</td></tr>
+            <tr><td><b>价格 / 差价</b></td><td class="num">14</td><td>刚买完就降价，不给退差价；不同渠道价格不一样</td></tr>
+            <tr><td><b>赠品 / 活动</b></td><td class="num">9</td><td>活动赠品不兑现；赠品要晒单才给</td></tr>
+            <tr><td><b>物流 / 发货</b></td><td class="num">7</td><td>隔壁省发货四天没出省；定金付完迟迟不发货</td></tr>
+            <tr><td><b>发票</b></td><td class="num">2</td><td>确认收货十天不给开票</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:12px;margin-top:9px;color:var(--muted)">
+          注：一条差评可能同时涉及多类，因此分类条数之和大于 51。
+        </p>
+        <details>
+          <summary>展开：这一类的 8 条用户原话</summary>
+          <div class="body">
+            <div class="q">30 天无理由使用不满意可以退货几乎不存在。寄回运费要三四百。<span class="qsrc">平台评价</span></div>
+            <div class="q">店铺首页标价 5299，下单后立刻降 1500 卖 3799。损害消费者权益。<span class="qsrc">平台评价</span></div>
+            <div class="q">赠品需要好评才能获取。涉及虚假宣传。<span class="qsrc">平台评价</span></div>
+            <div class="q">说了开专票，结果开了个普票过来，专票好不容易开过来了，又红冲了。<span class="qsrc">平台评价</span></div>
+            <div class="q">一个年货节一个 3.8 节，平台给的券都是一样的，不给补差价，退货还要自己付运费。<span class="qsrc">平台评价</span></div>
+            <div class="q">客服翻来覆去就几句车轱辘话："亲，抱歉呢""已反馈哦"。<span class="qsrc">平台评价</span></div>
+            <div class="q">我遇到了发货问题，一开始收货有点困难。他们全程积极响应。这种售后服务水平确实让我对这家公司更有信心。（反面案例：服务做得好会被写进好评）<span class="qsrc">亚马逊评价（5★）</span></div>
+            <div class="q">椅子很棒，但客服简直糟糕透顶。他们试图从我的退款中扣除 277 美元。<span class="qsrc">亚马逊评价（4★）</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="callout n">
+        <b>这一部分对业务的意义</b><br>
+        51 条差评里有 29 条指向客服、17 条指向退货运费、14 条指向价格管理。<b>这三项都不需要改产品</b>，
+        属于流程与政策可以调整的范围。这也是本次调研里最具性价比的改进方向。
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>B · 纯产品问题 —— 20 条（28.2%）</h3>
+      <table>
+        <thead><tr><th style="width:112px">部件 / 话题</th><th class="num" style="width:56px">条数</th><th>用户描述的具体现象</th></tr></thead>
+        <tbody>
+          <tr><td><b>做工与外观件</b></td><td class="num">16</td><td>接缝毛刺割手、椅背掉漆、logo 字母破损、有油渍污渍、疑似收到退货机</td></tr>
+          <tr><td><b>坐垫</b></td><td class="num">14</td><td>坐垫前端太高顶大腿、坐垫太短、海绵太软坐久了下陷</td></tr>
+          <tr><td><b>热 / 闷</b></td><td class="num">10</td><td>空调房内仍觉得闷；通风只吹屁股，背部仍然热</td></tr>
+          <tr><td><b>电池 / 充电</b></td><td class="num">7</td><td>电池盒损坏；充电口倾斜一动就掉线；电池炸裂并烧坏充电头（1 例）</td></tr>
+          <tr><td><b>异响</b></td><td class="num">6</td><td>后仰、拉伸、扶手处咯吱声；用一段时间后出现</td></tr>
+          <tr><td><b>头枕 / 颈枕</b></td><td class="num">5</td><td>头枕太松会往下掉；158cm 用户调最低仍够不到脖子</td></tr>
+          <tr><td><b>气味</b></td><td class="num">4</td><td>刺鼻；使用一个月后仍有味道</td></tr>
+          <tr><td><b>轮子</b></td><td class="num">4</td><td>太滑，脚一蹬椅子就跑；官方没有可锁定的轮子可换</td></tr>
+          <tr><td><b>拉伸功能</b></td><td class="num">4</td><td>幅度小、时间短；按钮容易误触后自动复位；无记忆功能</td></tr>
+          <tr><td><b>电动部件</b></td><td class="num">4</td><td>电动功能到货即失效；电机噪音大，不适合办公区使用</td></tr>
+          <tr><td><b>腰托位置</b></td><td class="num">3</td><td>支撑点偏上顶到背/肋骨，腰窝撑不到；正坐时腰是空的</td></tr>
+          <tr><td><b>脚踏</b></td><td class="num">3</td><td>太窄、腿托中间是空的，脚一动就掉；用两个月后断裂</td></tr>
+          <tr><td><b>座高</b></td><td class="num">3</td><td>最低档仍然偏高，脚踩不到地；扶手无法与桌面齐平</td></tr>
+          <tr><td><b>坐深</b></td><td class="num">1</td><td>坐深固定，高个子大腿悬空</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>展开：关于"腰托位置"的 3 条完整原话（技术相关，最重要）</summary>
+        <div class="body">
+          <div class="q">椅子的腰部是基本在中上方顶着，腰上根本顶不到。全件好像没金属大件，都是塑料。<span class="qsrc">平台评价（差评）</span></div>
+          <div class="q">斜向单推杆 + 联动的结构设计存在硬伤，调节顶腰力度时支撑点会上下偏移，<b>前移顶肋骨、后移腰椎悬空</b>，174cm 标准体型都要反复调试才能勉强对准位置，低于 165cm 的小个子大概率顶不到腰，高于 185cm 的高个子则容易被顶到肋骨。<span class="qsrc">平台评价（差评）</span></div>
+          <div class="q">各种姿势都试过，腰靠只能用最低档，不然顶得受不了。<span class="qsrc">小红书评论</span></div>
+          <div class="q">我为了腰部靠近骶骨的位置能有支撑，基本没调腰部那个按钮，按了以后不但腰部没支撑，背部还会空出来。<span class="qsrc">小红书评论</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="src">数据源：清闲平台评价 71 条差评 + 24 条中评，逐条人工归类；分类条数之和大于 71 是因单条差评可同时涉及多类。</div>
+</section>
+
+<!-- ===== 7 消费者主动关心/提出 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 6 部分 · 买前在问什么</div>
+    <h2>377 条"问大家"里，消费者自己最关心的问题</h2>
+    <p class="sub">问大家反映的是"还没买的人在犹豫什么"，与买后评价是互补的两组数据。</p>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>买前问题排行（377 条）</h3>
+      <table>
+        <thead><tr><th style="width:120px">问题类型</th><th colspan="2" class="num" style="width:30%">提问条数</th><th class="num">占比</th><th>典型提问</th></tr></thead>
+        <tbody>
+          <tr class="hi-row"><td>选 45 还是 48</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:100%"></div></div></div></td><td class="num">70</td><td class="num">18.6%</td><td>"168cm 买 45 还是 48？"</td></tr>
+          <tr class="hi-row"><td>价格 / 多少钱入的</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:60%"></div></div></div></td><td class="num">42</td><td class="num">11.1%</td><td>"大家啥价格入的？"</td></tr>
+          <tr class="hi-row"><td>坐着热不热</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:56%"></div></div></div></td><td class="num">39</td><td class="num">10.3%</td><td>"坐垫热不热带风扇会不会好点？"</td></tr>
+          <tr><td>腰 / 骶骨支撑</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:47%"></div></div></div></td><td class="num">33</td><td class="num">8.8%</td><td>"腰突患者适合吗？"</td></tr>
+          <tr><td>头枕能不能枕到</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:23%"></div></div></div></td><td class="num">16</td><td class="num">4.2%</td><td>"160 身高头枕会不会太高？"</td></tr>
+          <tr><td>用几年会不会坏</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:23%"></div></div></div></td><td class="num">16</td><td class="num">4.2%</td><td>"电机寿命多久？电池买不到怎么办？"</td></tr>
+          <tr><td>跟竞品比如何</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:23%"></div></div></div></td><td class="num">16</td><td class="num">4.2%</td><td>"和赫曼米勒能比吗？"</td></tr>
+          <tr><td>电池 / 充电</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:21%"></div></div></div></td><td class="num">15</td><td class="num">4.0%</td><td>"多久充一次？没电了还能调吗？"</td></tr>
+          <tr><td>好不好清洁</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:21%"></div></div></div></td><td class="num">15</td><td class="num">4.0%</td><td>"白色容易脏吗？椅套在哪买？"</td></tr>
+          <tr><td>哪里有实体店试坐</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:19%"></div></div></div></td><td class="num">13</td><td class="num">3.4%</td><td>"珠海哪里有实物体验？"</td></tr>
+          <tr><td>有没有异响</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:17%"></div></div></div></td><td class="num">12</td><td class="num">3.2%</td><td>"后仰会咯吱响么？"</td></tr>
+          <tr><td>通风效果</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:13%"></div></div></div></td><td class="num">9</td><td class="num">2.4%</td><td>"座椅通风效果怎么样？"</td></tr>
+          <tr><td>脚踏好不好用</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:7%"></div></div></div></td><td class="num">5</td><td class="num">1.3%</td><td>"有人的脚垫单出吗？"</td></tr>
+          <tr><td>有没有味道</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:3%"></div></div></div></td><td class="num">2</td><td class="num">0.5%</td><td>"新到的椅子味道大不大？"</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>展开：三个高频问题的代表性对话</summary>
+        <div class="body">
+          <div class="q n">问："170 / 73kg 不知道买 45 还是 48 的" → 答："跟我差不多，45 就行"<span class="qsrc">问大家</span></div>
+          <div class="q n">问："163 建议买标准版还是加长版？" → 答："<b>一律建议买加长版</b>"<span class="qsrc">问大家</span></div>
+          <div class="q n">问："170 / 60 公斤男，官方推荐 45 但很多人都推 48" → 答："选大"<span class="qsrc">问大家</span></div>
+          <div class="q n">问："这椅子真的值 4000 块钱吗？" → 答："外面很多比它高价的，还不值它"<span class="qsrc">问大家</span></div>
+          <div class="q n">问："有人电池出问题过吗？" → 答："买了快半年也才充电一次，电池没问题，都快忘了有电池的存在"<span class="qsrc">问大家</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>站外 658 条评论关注什么</h3>
+        <table>
+          <thead><tr><th style="width:130px">话题</th><th class="num">提及条数</th><th class="num">占比</th></tr></thead>
+          <tbody>
+            <tr><td>去哪试坐 / 线下门店</td><td class="num">37</td><td class="num">5.6%</td></tr>
+            <tr><td>热 / 闷</td><td class="num">25</td><td class="num">3.8%</td></tr>
+            <tr><td>贵 / 预算</td><td class="num">24</td><td class="num">3.6%</td></tr>
+            <tr><td>提到西昊</td><td class="num">19</td><td class="num">2.9%</td></tr>
+            <tr><td>品控 / 异响 / 坏了</td><td class="num">17</td><td class="num">2.6%</td></tr>
+            <tr><td>骶骨支撑</td><td class="num">10</td><td class="num">1.5%</td></tr>
+            <tr><td>提到黑白调</td><td class="num">9</td><td class="num">1.4%</td></tr>
+            <tr><td>营销 / 广告 / 水军质疑</td><td class="num">8</td><td class="num">1.2%</td></tr>
+            <tr><td>提到傲风</td><td class="num">1</td><td class="num">0.2%</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:12px;margin-top:9px;color:var(--muted)">
+          站外评论里"询问去哪能试坐"的条数（37）超过"吐槽热"（25），是出现频率最高的一类内容。
+        </p>
+      </div>
+      <div class="card soft">
+        <h3>消费者明确提出、但目前没有的 9 项</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:132px">可拆洗 / 官方椅套</td><td>出现 15 次</td></tr>
+            <tr><td>网面版本（更透气）</td><td>多次，含"等出网孔坐垫再买"</td></tr>
+            <tr><td>可锁定的轮子</td><td>4 条差评 + 问大家</td></tr>
+            <tr><td>能调更低的最低座高</td><td>3 条差评 + 问大家</td></tr>
+            <tr><td>椅背高度可调</td><td>站外多次</td></tr>
+            <tr><td>椅背加宽</td><td>站外多次</td></tr>
+            <tr><td>前倾办公档位</td><td>问大家</td></tr>
+            <tr><td>电池电量显示</td><td>站外</td></tr>
+            <tr><td>无滚轮的固定脚版本</td><td>问大家</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="src">数据源：清闲问大家 377 条 / 清闲小红书 658 条去重评论</div>
+</section>
+
+<!-- ===== 四款产品 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 7 部分 · 四款产品</div>
+    <h2>本次对比的四款产品</h2>
+    <p class="sub">按本报告顺序排列。<b>清闲 OC1 Pro 为对标基准</b>，其余三款为参照它推出的同期产品。</p>
+  </div>
+
+  <div class="cols-4">
+    <div class="card prod base">
+      <div class="imgbox"><img src="./清闲 OC1 Pro 用户调研报告_files/清闲OC1-PRO.jpg" alt="清闲 OC1 Pro"></div>
+      <div class="prodinfo">
+        <span class="tagline">对标基准</span>
+        <b>清闲 OC1 Pro</b>
+        <span class="price">¥4,299</span>
+        <ul>
+          <li>电动腰托：行程 50mm，方向<b>斜向上</b></li>
+          <li>座垫通风：2 档 / 4,000 转</li>
+          <li>坐深：<b>固定</b>，45 / 48cm 二选一</li>
+          <li>椅背高度：<b>不可调</b></li>
+          <li>扶手：4D</li>
+          <li>适配身高：153–186cm</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card prod">
+      <div class="imgbox"><img src="./清闲 OC1 Pro 用户调研报告_files/黑白调T8Max.jpg" alt="黑白调 T8 Max"></div>
+      <div class="prodinfo">
+        <b>黑白调 T8 Max</b>
+        <span class="price">¥3,339</span>
+        <ul>
+          <li>电动腰托：<b>平直顶腰</b>（官方称 22°）</li>
+          <li>座垫通风：3 档 / 4,200 转</li>
+          <li>坐深：可调</li>
+          <li>椅背高度：可调</li>
+          <li>扶手：4D 联动</li>
+          <li>适配身高：150–195cm</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card prod">
+      <div class="imgbox"><img src="./清闲 OC1 Pro 用户调研报告_files/西昊H300.jpg" alt="西昊 H300 Pro"></div>
+      <div class="prodinfo">
+        <b>西昊 H300 Pro</b>
+        <span class="price">¥3,039</span>
+        <ul>
+          <li>电动腰托：<b>前后 + 上下双向</b></li>
+          <li>座垫通风：<b>无</b></li>
+          <li>坐深：可调</li>
+          <li>椅背高度：可调</li>
+          <li>扶手：7D 联动机械臂</li>
+          <li>适配身高：150–195cm</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card prod">
+      <div class="imgbox"><img src="./清闲 OC1 Pro 用户调研报告_files/傲风S7.jpg" alt="傲风 S7"></div>
+      <div class="prodinfo">
+        <b>傲风 S7</b>
+        <span class="price">¥3,999 起</span>
+        <ul>
+          <li>电动腰托：<b>平直</b>，称"三段平推"</li>
+          <li>座垫通风：3 档</li>
+          <li>坐深：可调（前后 5cm）</li>
+          <li>椅背高度：可调（上下 5cm）</li>
+          <li>扶手：6D 全维</li>
+          <li>适配身高：155–195cm</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout n" style="margin-top:18px">
+    <b>四款的共同点与差异点</b><br>
+    四款<b>都有电动腰托</b>、都有整椅联动跟随；差异集中在四处：
+    <b>推杆方向</b>（清闲斜向上，其余三家平直或双向）、
+    <b>座垫通风</b>（西昊没有）、
+    <b>坐深与椅背高度</b>（清闲均不可调，其余三家均可调）、
+    <b>扶手维度</b>（清闲与黑白调为 4D，西昊 7D、傲风 6D）。
+  </div>
+
+  <div class="src">图片来源：各品牌官方商品图。参数来源：四家官方商品页与主图详情页。</div>
+</section>
+
+<!-- ===== 8 竞品对比 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 8 部分 · 竞品对比</div>
+    <h2>四家椅子的功能对照，与各自的用户抱怨</h2>
+    <p class="sub">功能一栏来自各家官方商品页；抱怨一栏来自各自的平台评价与问大家。</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:150px">对比项</th>
+        <th>清闲 OC1 Pro</th><th>黑白调 T8 Max</th><th>西昊 H300 Pro</th><th>傲风 S7</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><b>活动价</b></td><td>¥4,299</td><td>¥3,339</td><td>¥3,039</td><td>¥3,999 起</td></tr>
+      <tr><td><b>电动腰托</b></td><td>有 · 前后伸缩 50mm</td><td>有 · 自动跟随</td><td>有 · 前后 + 上下双向</td><td>有 · 自动跟随</td></tr>
+      <tr><td><b>座垫通风</b></td><td>有 · 2 档 4,000 转</td><td>有 · 3 档 4,200 转</td><td><b>无</b></td><td>有 · 3 档</td></tr>
+      <tr><td><b>坐深可调</b></td><td><b>无</b>（只能选 45/48）</td><td>有</td><td>有</td><td>有 · 前后 5cm</td></tr>
+      <tr><td><b>椅背高度可调</b></td><td><b>无</b></td><td>有</td><td>有</td><td>有 · 上下 5cm</td></tr>
+      <tr><td><b>身高覆盖</b></td><td>153–186cm</td><td>150–195cm</td><td>150–195cm</td><td>155–195cm</td></tr>
+      <tr><td><b>后仰上限</b></td><td>160°（5 档）</td><td>165°</td><td>165°</td><td>152°</td></tr>
+      <tr><td><b>脚踏</b></td><td>独立分开的一个</td><td>连着椅子、可收纳</td><td>连着椅子</td><td>连着椅子</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cols-3" style="margin-top:16px">
+    <div class="card">
+      <h3>清闲 · 用户抱怨（来自本报告第 5 部分）</h3>
+      <table style="font-size:12.5px">
+        <tbody>
+          <tr><td>客服 / 售后</td><td class="num">29</td></tr>
+          <tr><td>退货 / 运费</td><td class="num">17</td></tr>
+          <tr><td>做工 / 外观件</td><td class="num">16</td></tr>
+          <tr><td>坐垫</td><td class="num">14</td></tr>
+          <tr><td>价格 / 差价</td><td class="num">14</td></tr>
+          <tr><td>热 / 闷</td><td class="num">10</td></tr>
+          <tr><td>赠品 / 活动</td><td class="num">9</td></tr>
+          <tr><td>电池 / 充电</td><td class="num">7</td></tr>
+          <tr><td>物流 / 发货</td><td class="num">7</td></tr>
+          <tr><td>异响</td><td class="num">6</td></tr>
+        </tbody>
+      </table>
+      <p class="sub" style="font-size:12px;color:var(--muted);margin-top:8px">口径：71 条差评中各话题出现条数</p>
+    </div>
+
+    <div class="card">
+      <h3>黑白调 T8 Max · 用户抱怨</h3>
+      <p class="sub" style="font-size:12.5px;color:var(--muted);margin-bottom:7px">182 条评价中：好评 174 · 中评 3 · 差评 4</p>
+      <table style="font-size:12.5px">
+        <tbody>
+          <tr><td>腰部支撑偏软</td><td class="num">2</td></tr>
+          <tr><td>电池续航短</td><td class="num">2</td></tr>
+          <tr><td>做工粗糙 / 毛刺</td><td class="num">2</td></tr>
+          <tr><td>扶手高低不平</td><td class="num">1</td></tr>
+          <tr><td>后仰阻力调不了</td><td class="num">1</td></tr>
+          <tr><td>把手上味道重</td><td class="num">1</td></tr>
+          <tr><td>客服 / 售后</td><td class="num">2</td></tr>
+          <tr><td>价格 / 活动</td><td class="num">2</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>展开：黑白调用户原话</summary>
+        <div class="body">
+          <div class="q">腰部支撑非常软，腰靠上去还会往后塌一些，且支撑距离非常短。<span class="qsrc">黑白调平台评价（中评）</span></div>
+          <div class="q">超级热，夏天腰背铁定一身汗，座面有风扇会好些。<span class="qsrc">黑白调平台评价（中评）</span></div>
+          <div class="q">电池容量小，隔三差五要充电。<span class="qsrc">黑白调平台评价（中评）</span></div>
+          <div class="q">目前看用了不到一个星期就需要充电了。<span class="qsrc">黑白调问大家</span></div>
+          <div class="q">后仰阻力根本调不了，追腰也没反应。<span class="qsrc">黑白调平台评价（差评）</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>西昊 / 傲风 · 已知抱怨</h3>
+      <p class="sub" style="font-size:12.5px;color:var(--muted);margin-bottom:7px">
+        ⚠️ 西昊平台上基本没有评价数据与问大家，傲风仅 7 条问大家。因此这两家<b>不参与抱怨条数统计</b>，以下仅列出站外讨论中反复出现的说法。
+      </p>
+      <h3 style="margin-top:6px">西昊 H300 Pro</h3>
+      <ul style="list-style:none;font-size:12.5px;color:var(--ink-2)">
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">坐垫前端向下倾斜，人坐着会往前滑</li>
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">整椅晃动、椅背左右晃动</li>
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">没有座垫通风</li>
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">调节项太多，扶手容易误触</li>
+        <li style="padding:5px 0">轮子不丝滑，移动费劲</li>
+      </ul>
+      <h3 style="margin-top:12px">傲风 S7</h3>
+      <ul style="list-style:none;font-size:12.5px;color:var(--ink-2)">
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">结构与黑白调相同，仅换外观</li>
+        <li style="padding:5px 0;border-bottom:1px solid var(--grid)">问大家仅 7 条，多数为客服回复</li>
+        <li style="padding:5px 0">被消费者当作"清闲的替代品"</li>
+      </ul>
+    </div>
+  </div>
+  <div class="src">功能数据来自各家官方商品页；清闲与黑白调的抱怨条数来自其平台评价原文统计；西昊无可用评价数据，傲风仅有 7 条问大家。</div>
+</section>
+
+<!-- ===== 三家如何参照清闲 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 9 部分 · 竞品如何参照清闲</div>
+    <h2>三家在参照清闲做产品时：借鉴了什么、没跟什么、优化了什么</h2>
+    <p class="sub">
+      <b>判定依据（三条）：</b>
+      ① 时间顺序 —— 清闲 OC1 于 2025 年众筹上市，其评价最早出现在 2025-07；黑白调 T8 Max 与西昊 H300 Pro 均在 2026-10-09 首发，傲风 S7 同期，<b>清闲早约 15 个月</b>。
+      ② 官方口径 —— 西昊卖点文档中明确标注「竞品对标：LiberNovo 清闲 OC1 Pro」；黑白调详情页第 3 段设有指向清闲的逐项对比表。
+      ③ 用户认知 —— 竞品评价区高频出现"跟清闲一模一样买哪个""就硬抄清闲呗""清闲和他的三个儿"。
+    </p>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>A · 借鉴的（清闲先做，三家跟进）</h3>
+      <table>
+        <thead><tr><th style="width:118px">特征</th><th class="num">清闲</th><th class="num">黑白调</th><th class="num">西昊</th><th class="num">傲风</th></tr></thead>
+        <tbody>
+          <tr><td><b>电动腰托</b>（可电动调节的腰部支撑）</td><td class="num">✅ 50mm</td><td class="num">✅</td><td class="num">✅</td><td class="num">✅</td></tr>
+          <tr><td><b>整椅联动跟随</b>（人动椅子跟着动）</td><td class="num">✅</td><td class="num">✅</td><td class="num">✅</td><td class="num">✅</td></tr>
+          <tr><td><b>多片式柔性背板</b> + 连接支点</td><td class="num">✅ 8 片</td><td class="num">✅ 10 片</td><td class="num">✅ 8 模组</td><td class="num">✅ 10 片</td></tr>
+          <tr><td><b>电动脊柱拉伸</b></td><td class="num">✅</td><td class="num">✅</td><td class="num">✅</td><td class="num">✅</td></tr>
+          <tr><td><b>座垫主动通风</b></td><td class="num">✅ 2 档</td><td class="num">✅ 3 档</td><td class="num" style="color:var(--s-critical)">❌</td><td class="num">✅ 3 档</td></tr>
+        </tbody>
+      </table>
+      <p class="sub" style="font-size:12.5px;margin-top:9px">
+        <b>五项特征里，三家平均跟进了 4.7 项</b>（黑白调 5 项、傲风 5 项、西昊 4 项）。唯一没跟的是西昊的座垫通风——这也是竞品用户自己指出的：
+        「西昊就是<b>如果不要座椅通风可以秒冲，需要座椅通风就去清闲</b>」。
+        四家的联动系统名称各不相同（全息随动 / 12 轨 8 轴 3 簧 / DynaCore / 全姿滑翔），但公开描述的结构原理同属一类。
+      </p>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>B · 没跟的（清闲有，三家明确未采纳）</h3>
+        <table>
+          <thead><tr><th style="width:108px">清闲的做法</th><th>三家的做法</th><th style="width:92px">是否跟进</th></tr></thead>
+          <tbody>
+            <tr><td><b>独立分体式脚踏</b></td><td>黑白调、西昊、傲风<b>全部改为一体式</b>（随椅收纳）</td><td><span class="badge p0">0 / 3 跟进</span></td></tr>
+            <tr><td><b>丹麦 Gabriel 进口面料</b></td><td>三家全部改用自研面料：黑白调「三防面料」并点名反向对比 Gabriel「不耐脏、维护成本高」</td><td><span class="badge p0">0 / 3 跟进</span></td></tr>
+            <tr><td><b>座深只能二选一</b>（45 或 48cm）</td><td>三家<b>全部改为可调</b>，不采用"买前选尺寸"的模式</td><td><span class="badge p0">0 / 3 跟进</span></td></tr>
+            <tr><td><b>无椅背高度调节</b></td><td>三家<b>全部增加</b>椅背上下调节</td><td><span class="badge p0">0 / 3 跟进</span></td></tr>
+            <tr><td><b>纯电控、无传感器</b></td><td>只有黑白调加了姿态传感器 + 算法；西昊、傲风仍是纯电控</td><td><span class="badge p2">1 / 3 跟进</span></td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:12.5px;margin-top:9px">
+          这五项里，前三项是清闲被用户明确批评过的设计：分体脚踏（8 条竞品用户评论提到）、
+          Gabriel 面料（被黑白调官方列为缺点）、坐深二选一（清闲问大家第一大类问题，70 条）。
+          <b>三家在这些点上集体反向选择</b>。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>C · 优化的（三家在清闲基础上做了改进）</h3>
+    <table>
+      <thead>
+        <tr><th style="width:126px">维度</th><th style="width:200px">清闲 OC1 Pro</th><th>黑白调 T8 Max</th><th>西昊 H300 Pro</th><th>傲风 S7</th></tr>
+      </thead>
+      <tbody>
+        <tr class="hi-row"><td><b>推杆作用方向</b></td>
+          <td>斜向上顶背（用户反馈"顶到背/肋骨"）</td>
+          <td><b>改为平直顶腰</b>，官方称 22° 黄金角度</td>
+          <td><b>改为前后 + 上下双向</b>，可平移支撑点</td>
+          <td><b>改为平直</b>，称"三段平推"</td></tr>
+        <tr><td><b>坐深</b></td><td>固定，只能买前选 45 / 48cm</td><td><b>可调</b></td><td><b>可调</b></td><td><b>可调</b>（前后 5cm）</td></tr>
+        <tr><td><b>椅背高度</b></td><td>不可调</td><td><b>可调</b></td><td><b>可调</b>（椅背前后）</td><td><b>可调</b>（上下 5cm）</td></tr>
+        <tr><td><b>脚踏</b></td><td>独立分体，用户反馈"占地、易踢到、搁腿"</td><td><b>一体式</b>，随椅收纳</td><td><b>一体式</b>，海绵厚实</td><td><b>一体式</b>软包</td></tr>
+        <tr><td><b>扶手维度</b></td><td>4D</td><td>4D 联动（<b>与清闲同级，未升级</b>）</td><td><b>7D</b> 联动机械臂</td><td><b>6D</b> 全维扶手</td></tr>
+        <tr><td><b>通风档位</b></td><td>2 档 / 4,000 转</td><td><b>3 档 / 4,200 转</b></td><td class="num" style="color:var(--muted)">无</td><td><b>3 档</b></td></tr>
+        <tr><td><b>脊柱拉伸</b></td><td>单一循环模式，仅后仰时有效</td><td><b>三档可调</b> + 久坐自动提醒</td><td>有（未突出档位差异）</td><td>电助力循环（<b>机制与清闲相同</b>）</td></tr>
+        <tr><td><b>身高覆盖</b></td><td>153–186cm</td><td><b>150–195cm</b></td><td><b>150–195cm</b></td><td><b>155–195cm</b></td></tr>
+        <tr><td><b>后仰上限</b></td><td>160°</td><td><b>165°</b></td><td><b>165°</b></td><td>152°（<b>更低</b>）</td></tr>
+        <tr><td><b>前倾支撑</b></td><td>无（用户反馈"身体稍微往前倾一下就空腰"）</td><td>无</td><td><b>专门做了</b>，官方主打"全姿态"</td><td>无</td></tr>
+        <tr><td><b>控制方式</b></td><td>扶手按键</td><td><b>扶手按键 + 小程序</b></td><td>机械调节为主</td><td><b>扶手按键 + 底盘线控</b></td></tr>
+        <tr><td><b>使用姿态感知</b></td><td>无传感器，纯电控</td><td><b>传感器 + 芯片 + 算法</b></td><td>无</td><td>无（称"AI 寻迹"）</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="font-size:13px;margin-top:11px">
+      <b>表格读法</b>：12 个维度中，<b>黑白调优化 10 项、西昊 8 项、傲风 8 项</b>。
+      三家改进方向高度一致，集中在清闲被用户批评最多的四个位置：
+      <b>推杆方向（顶背 → 顶腰）、坐深可调、椅背高度可调、脚踏一体式</b>——这四项三家全部跟进。
+      未优化项也集中在三处：<b>椅背散热（三家都无）、扶手维度（黑白调未升级）、前倾支撑（仅西昊做了）</b>。
+    </p>
+  </div>
+
+  <div class="card soft" style="margin-top:16px">
+    <h3>D · 四家都还没做的（共同空白）</h3>
+    <table>
+      <thead><tr><th style="width:150px">空白点</th><th>现状</th></tr></thead>
+      <tbody>
+        <tr><td><b>椅背散热</b></td><td>四家的通风<b>全部只做座垫，椅背均无</b>。清闲问大家中有用户直接问「靠背热不热？通风只有屁股那里是吧？」；平台评价中"热/闷"提及 588 条，其中大量描述"屁股凉了、背还是热"。</td></tr>
+        <tr><td><b>可锁定的轮子</b></td><td>清闲用户反馈"轮子太滑、蹬一脚椅子就跑"，官方无锁定轮可换；四家公共配置中均未见轮子锁定功能。</td></tr>
+        <tr><td><b>可拆洗面料</b></td><td>清闲用户反馈"海绵厚度大、晾半个月都干不透"；四家均为不可拆洗，用户只能自行购买第三方面料套。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="src">
+    借鉴与优化判定的证据来源：四家官方商品页与主图详情页（清闲OC1_Pro_卖点结构整理.md / 黑白调T8max_卖点结构整理.md / 西昊H300Pro_卖点结构整理.md / 傲风S7_卖点结构整理.md）；
+    用户认知与痛点描述来源：清闲平台评价 5,000 条、清闲问大家 377 条、黑白调小红书 685 条、西昊小红书 308 条。
+  </div>
+</section>
+
+<!-- ===== 竞品卖点主线 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 10 部分 · 竞品卖点体系</div>
+    <h2>四家的卖点主线，与互相之间的攻击点</h2>
+    <p class="sub">以下全部来自四家官方商品页与主图详情页，不是用户反馈，属于"各家自己怎么说自己"。</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="width:118px">对比项</th><th>清闲 OC1 Pro</th><th>黑白调 T8 Max</th><th>西昊 H300 Pro</th><th>傲风 S7</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>主打概念</b></td>
+        <td>动态人体工学<br><span style="color:var(--muted)">"你动它也动"</span></td>
+        <td>智能人体工学<br><span style="color:var(--muted)">"真智能 随身动"</span></td>
+        <td>全姿态动态<br><span style="color:var(--muted)">"姿势就是力量"</span></td>
+        <td>职业级智能<br><span style="color:var(--muted)">"为胜利而生"</span></td></tr>
+      <tr><td><b>腰撑技术命名</b></td>
+        <td>千人千背适配系统<br>50mm 电助力推杆</td>
+        <td>全球首创 AI 大推杆<br>智能追腰</td>
+        <td>双维四向动态推杆<br>（前后滑 + 上下伸缩）</td>
+        <td>AI 随动寻迹追腰</td></tr>
+      <tr><td><b>背部结构</b></td>
+        <td>14 双连接点 + 8 柔性面板 + 16 球形支点</td>
+        <td>3 龙骨 + 10 面板 + 18 双链节点</td>
+        <td>4 抓手 + 8 触点 + 8 活动模组</td>
+        <td>3 龙骨 + 12 支点 + 36 柔性链接 + 4 缓冲模块 + 10 分区面板</td></tr>
+      <tr><td><b>联动系统命名</b></td>
+        <td>全息随动<br>（颈枕/椅背/座垫/扶手四追随）</td>
+        <td>12 轨 · 8 轴 · 3 簧<br>整椅随动</td>
+        <td>DynaCore<br>四区跟随</td>
+        <td>全姿同步<br>滑翔联动</td></tr>
+      <tr><td><b>分压主张</b></td>
+        <td>—</td>
+        <td>帕斯卡全域匀压<br>（6 区协同分压）</td>
+        <td>—</td>
+        <td>云感承托全域分压</td></tr>
+      <tr><td><b>调节项数</b></td>
+        <td>未突出</td>
+        <td><b>整椅 20 项调节</b></td>
+        <td>未突出</td>
+        <td>未突出</td></tr>
+      <tr><td><b>通风规格</b></td>
+        <td>座垫新风 2 档 4,000 转</td>
+        <td>智感清风 3 档 4,200 转</td>
+        <td><b>无</b></td>
+        <td>三档强力吸风</td></tr>
+      <tr><td><b>操控方式</b></td>
+        <td>扶手按键</td>
+        <td>扶手按键 + 小程序</td>
+        <td>机械调节为主</td>
+        <td>扶手按键 + 底盘线控</td></tr>
+      <tr><td><b>权威背书</b></td>
+        <td>iF 2026 + 红点 2026 + BDA 至尊奖</td>
+        <td>全球首创证明 + 销量第一认证</td>
+        <td>15 年工学积淀 + GRS 认证</td>
+        <td>连续 7 年电竞椅双第一 + EDG/VCT 赛事合作</td></tr>
+      <tr><td><b>详情页结构</b></td>
+        <td>40+ 屏长详情页，重技术原理</td>
+        <td>16 段，含"攻击性对比表"</td>
+        <td>12 段，用实验室数据论证</td>
+        <td>20 段，重电竞赛事背书</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cols" style="margin-top:16px">
+    <div class="card" style="border-color:color-mix(in srgb,var(--s-serious) 30%,transparent)">
+      <h3>黑白调详情页里，有一张点名对比清闲的表</h3>
+      <p class="sub" style="font-size:12.5px;margin-bottom:8px">
+        黑白调在详情页第 3 段放了一张"T8 Max VS 其他动态工学椅 Pro"的逐项对比表。从对比项的措辞可以对应到清闲的具体配置：
+      </p>
+      <table>
+        <thead><tr><th style="width:104px">对比项</th><th>黑白调自述</th><th>被对比的一方</th></tr></thead>
+        <tbody>
+          <tr><td><b>座椅面料</b></td><td>三防面料（防水防油防污），打理零负担</td><td>丹麦面料 Gabriel Atlantic —— <b>"不耐脏、维护成本高"</b></td></tr>
+          <tr><td><b>脚托形态</b></td><td>一体式脚托，随椅同步、好收纳</td><td><b>独立分体式脚踏</b> —— "占地碍事、搬运麻烦"</td></tr>
+          <tr><td><b>座椅通风</b></td><td>三档 4,200 转</td><td>2 档 4,000 转 —— "风力弱、降温缓慢"</td></tr>
+          <tr><td><b>脊柱拉伸</b></td><td>三档可调、正坐后仰都能拉伸、久坐自动提醒</td><td>"固定档位、仅后仰时可有效拉伸"</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>展开：为什么判定这 4 条指向清闲</summary>
+        <div class="body">
+          <p style="font-size:12.5px">
+            四点特征与清闲 OC1 Pro 的公开配置一一对应：① 清闲是国内唯一公开使用 <b>Gabriel Atlantic</b> 面料的品牌；
+            ② 清闲是四家中<b>唯一采用独立分体式脚踏</b>的（黑白调、西昊、傲风均为一体式）；
+            ③ 清闲通风为<b>两档 4,000 转</b>，黑白调为三档 4,200 转；
+            ④ 清闲的脊柱拉伸为<b>单一循环模式</b>，黑白调为三档可调。
+            黑白调未在表中出现品牌名，属于 <b>"隐性竞品对比"</b>写法。
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>四家之间的实际关系</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:96px"><b>黑白调 ↔ 傲风</b></td><td>用户在两家各自的评价区反复指出两者<b>结构与模具相同</b>。傲风 S7 与黑白调 T8 Max 的背部结构（3 龙骨 + 面板 + 双链节点）、联动系统、通风档位、后仰角度高度重合，差异主要在扶手与外观。</td></tr>
+            <tr><td><b>西昊 → 清闲</b></td><td>西昊 H300 Pro 的官方对标口径为清闲的<b>焕新版（OC1 焕新版）</b>，主打"全姿态"，其中"前倾支撑"直指清闲的短板。</td></tr>
+            <tr><td><b>傲风 → 清闲</b></td><td>傲风问大家中出现"<b>清闲平替？</b>"的提问，说明在消费者认知里傲风被放在清闲之下。</td></tr>
+            <tr><td><b>清闲 → 三家</b></td><td>清闲是<b>三家的共同对标对象</b>：黑白调点名打它的面料、脚托、通风、拉伸；西昊打它的前倾支撑；傲风在价格带上做它的替代品。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout n">
+        <b>这一页能读出的事实</b><br>
+        四家都把自己的腰撑技术起了独立的名字（千人千背 / AI 大推杆 / 双维四向 / 寻迹追腰），
+        但公开的结构描述高度相似（都是"龙骨 + 柔性面板 + 多个连接支点 + 电控推杆"）。
+        <b>差异主要体现在叙事方式、通风规格、以及坐深/椅背高度是否可调这三处。</b>
+      </div>
+    </div>
+  </div>
+  <div class="src">数据源：清闲OC1_Pro_卖点结构整理.md · 黑白调T8max_卖点结构整理.md · 西昊H300Pro_卖点结构整理.md · 傲风S7_卖点结构整理.md（均来自各家官方详情页与主图）</div>
+</section>
+
+<!-- ===== 竞品站外评价 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 11 部分 · 竞品站外评价</div>
+    <h2>在竞品自己的笔记下，清闲被提及率约 20%</h2>
+    <p class="sub">
+      数据源：<b>黑白调小红书</b>（12 篇笔记，685 条去重评论）与 <b>西昊小红书</b>（7 篇笔记，308 条去重评论）。
+      统计口径：某条评论中出现品牌名即计 1 条，一条评论只计一次。
+    </p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">21.5<span style="font-size:14px">%</span></div><div class="l">黑白调笔记下提到清闲</div><div class="n">147 / 685 条</div></div>
+    <div class="kpi"><div class="v">19.8<span style="font-size:14px">%</span></div><div class="l">西昊笔记下提到清闲</div><div class="n">61 / 308 条</div></div>
+    <div class="kpi"><div class="v">12.1<span style="font-size:14px">%</span></div><div class="l">黑白调笔记下提到西昊</div><div class="n">83 / 685 条</div></div>
+    <div class="kpi"><div class="v">1.3<span style="font-size:14px">%</span></div><div class="l">西昊笔记下提到黑白调</div><div class="n">4 / 308 条</div></div>
+    <div class="kpi"><div class="v">2.2<span style="font-size:14px">%</span></div><div class="l">黑白调笔记下提到傲风</div><div class="n">15 / 685 条</div></div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>竞品用户在说清闲什么（黑白调笔记下 147 条）</h3>
+      <table>
+        <thead><tr><th style="width:170px">话题</th><th colspan="2" class="num" style="width:34%">条数</th><th class="num">占提清闲的 %</th></tr></thead>
+        <tbody>
+          <tr><td>价格 / 性价比</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:100%"></div></div></div></td><td class="num">15</td><td class="num">10.2%</td></tr>
+          <tr><td><b>正面评价</b>（更舒服 / 支持原创 / 最终选了它）</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:100%"></div></div></div></td><td class="num">15</td><td class="num">10.2%</td></tr>
+          <tr class="hi-row"><td>做工 / 材质 / 异响 / 断裂</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:73%"></div></div></div></td><td class="num">11</td><td class="num">7.5%</td></tr>
+          <tr class="hi-row"><td>坐高偏高 / 小个子不友好</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:60%"></div></div></div></td><td class="num">9</td><td class="num">6.1%</td></tr>
+          <tr class="hi-row"><td>骶骨 / 腰骶支撑</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:60%"></div></div></div></td><td class="num">9</td><td class="num">6.1%</td></tr>
+          <tr class="hi-row"><td>脚踏是分开的</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:53%"></div></div></div></td><td class="num">8</td><td class="num">5.4%</td></tr>
+          <tr><td>原创性争议 / 是否抄袭</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:47%"></div></div></div></td><td class="num">7</td><td class="num">4.8%</td></tr>
+          <tr class="hi-row"><td>热 / 闷</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:40%"></div></div></div></td><td class="num">6</td><td class="num">4.1%</td></tr>
+          <tr class="hi-row"><td>腰部支撑点位置（顶背 / 顶胸）</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:40%"></div></div></div></td><td class="num">6</td><td class="num">4.1%</td></tr>
+          <tr class="hi-row"><td>坐深固定不可调</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:40%"></div></div></div></td><td class="num">6</td><td class="num">4.1%</td></tr>
+          <tr class="hi-row"><td>正坐 / 前倾时腰是空的</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:33%"></div></div></div></td><td class="num">5</td><td class="num">3.4%</td></tr>
+          <tr class="hi-row"><td>肩部悬空 / 靠背偏小</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:13%"></div></div></div></td><td class="num">2</td><td class="num">1.4%</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>展开：这些说法的用户原话（12 条）</summary>
+        <div class="body">
+          <h3 style="font-size:13px;margin-bottom:4px">清闲被说"热"</h3>
+          <div class="q">今天刚好线下都试了，清闲确实最舒服…但就是靠背热…<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">清闲我坐半小时就开始闷了，有点受不了。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">这种海绵的都会热吧，我看清闲的也全是说热的。<span class="qsrc">黑白调小红书</span></div>
+          <h3 style="font-size:13px;margin:10px 0 4px">腰部支撑点位置</h3>
+          <div class="q">我坐的时候清闲那个感觉顶的是背部靠上、快挨着肺那块，坐久了有点顶得慌，黑白调和西昊是托在腰上，感觉更合理。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">我买了 T8，原因很简单，因为他推杆不跟清闲一样是斜着顶的，给我胸顶得可疼了。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">清闲脚托是分开的，不喜欢，占地方，而且腰托的支撑太高。<span class="qsrc">黑白调小红书</span></div>
+          <h3 style="font-size:13px;margin:10px 0 4px">坐高与体型适配</h3>
+          <div class="q">清闲对于 165 以下不友好，椅背太高了。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">我是线下试了清闲，霍比特人 158 脚挨不到地，而且骶骨没有支撑，没试盲买了 T8。<span class="qsrc">黑白调小红书</span></div>
+          <h3 style="font-size:13px;margin:10px 0 4px">做工与价格</h3>
+          <div class="q">清闲 pro 坐感确实惊艳，电动拉升也是一绝，但是最让我接受不了的是材质太拉了，买回去一定会"咔吱"响。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">清闲那个海绵坐垫说是有通风设计，但海绵就是海绵，夏天坐上去还是闷。而且我之前坐他家椅子半年就坏了，腰靠推杆那里直接断掉。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q">西昊吧，清闲定价太高但其实质量没到那个层次，空腰，除非你能买到他的半价。<span class="qsrc">黑白调小红书</span></div>
+          <h3 style="font-size:13px;margin:10px 0 4px">原创性争议</h3>
+          <div class="q">其实清闲也是改良的赫曼米勒 Embody，龙骨架那里，它腰靠气杆借鉴的西昊，人家 24 年就出电动气杆了，清闲很会融合，一般人注意不到这些，它营销一直都做得好，其实算不上什么原创。<span class="qsrc">黑白调小红书</span></div>
+          <h3 style="font-size:13px;margin:10px 0 4px">但正面评价同样集中</h3>
+          <div class="q v">个人整体体验是清闲最舒适，但脚蹬是分离式，还有价格也是最贵。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q v">试坐了清闲，只能说吊打西昊。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q v">感觉是清闲创新，其他家跟风。<span class="qsrc">黑白调小红书</span></div>
+          <div class="q v">清闲和他的三个儿。<span class="qsrc">黑白调小红书（高赞）</span></div>
+          <div class="q v">清闲可以半躺办公，其他的只能半躺玩儿手机。<span class="qsrc">黑白调小红书</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>竞品用户在说清闲什么（西昊笔记下 61 条）</h3>
+        <table>
+          <thead><tr><th style="width:150px">话题</th><th colspan="2" class="num" style="width:34%">条数</th><th class="num">占提清闲的 %</th></tr></thead>
+          <tbody>
+            <tr><td><b>正面评价</b></td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:100%"></div></div></div></td><td class="num">13</td><td class="num">21.3%</td></tr>
+            <tr><td>价格 / 性价比</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:69%"></div></div></div></td><td class="num">9</td><td class="num">14.8%</td></tr>
+            <tr class="hi-row"><td>脚踏 / 脚托</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:46%"></div></div></div></td><td class="num">6</td><td class="num">9.8%</td></tr>
+            <tr class="hi-row"><td>坐高偏高 / 脚踩不到地</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:46%"></div></div></div></td><td class="num">6</td><td class="num">9.8%</td></tr>
+            <tr class="hi-row"><td>热 / 闷</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:38%"></div></div></div></td><td class="num">5</td><td class="num">8.2%</td></tr>
+            <tr class="hi-row"><td>正坐 / 前倾时腰是空的</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:31%"></div></div></div></td><td class="num">4</td><td class="num">6.6%</td></tr>
+            <tr class="hi-row"><td>肩部悬空 / 靠背偏小</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:23%"></div></div></div></td><td class="num">3</td><td class="num">4.9%</td></tr>
+            <tr><td>做工 / 材质</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:15%"></div></div></div></td><td class="num">2</td><td class="num">3.3%</td></tr>
+            <tr><td>腰部支撑点位置</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:8%"></div></div></div></td><td class="num">1</td><td class="num">1.6%</td></tr>
+            <tr><td>坐深固定不可调</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:8%"></div></div></div></td><td class="num">1</td><td class="num">1.6%</td></tr>
+            <tr><td>骶骨支撑</td><td><div class="barcell"><div class="bartrack"></div></div></td><td class="num">0</td><td class="num">0%</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:12px;margin-top:9px;color:var(--muted)">
+          西昊笔记下对清闲的<b>正面评价占比（21.3%）高于黑白调笔记下（10.2%）</b>，负面则集中在热、坐高与前倾空腰三项。
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>反过来：竞品用户在自己笔记下抱怨什么</h3>
+        <div class="cols" style="gap:14px">
+          <div>
+            <h3 style="font-size:13px">黑白调 T8 Max</h3>
+            <ul style="list-style:none;font-size:12.5px;color:var(--ink-2)">
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">后仰只能固定几个角度、不能限位；阻力调最小也偏大，无法悬停</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">"AI 追腰"被质疑是电控感应而非算法</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">头枕偏硬、晃动感大</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">扶手只靠双螺丝固定，用久了会松</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">后仰时会"搓背"</li>
+              <li style="padding:5px 0"><b>但骶骨支撑被公认强于清闲</b></li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="font-size:13px">西昊 H300 Pro</h3>
+            <ul style="list-style:none;font-size:12.5px;color:var(--ink-2)">
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">坐垫前端向下倾斜，坐着会往前滑</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">整椅晃动、椅背左右晃</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">没有座垫通风</li>
+              <li style="padding:5px 0;border-bottom:1px solid var(--grid)">调节项多但扶手容易误触</li>
+              <li style="padding:5px 0">轮子不丝滑</li>
+            </ul>
+          </div>
+        </div>
+        <details>
+          <summary>展开：竞品用户抱怨原话（7 条）</summary>
+          <div class="body">
+            <div class="q">黑白调不如清闲。第二，后仰是固定几个角度不回弹，清闲是限位。而且黑白调调节阻力功能很差，最大的也比较小，导致无法悬停。清闲调节范围大很多。黑白调搓背，清闲没有。<b>但是黑白调有个优点就是骶骨支撑强比清闲强，唯一的优点了。</b><span class="qsrc">黑白调小红书</span></div>
+            <div class="q">这个 AI 追腰到底是真算法还是电控感应？看评测说本质是机械结构被动响应，有点存疑。<span class="qsrc">黑白调小红书</span></div>
+            <div class="q">黑白调的扶手只靠双螺丝固定，用一段时间就松松垮垮要重新拧。<span class="qsrc">黑白调小红书</span></div>
+            <div class="q">我 180 大腿空了 5cm 以上，这前端斜向下谁设计的我真服了。<span class="qsrc">西昊小红书</span></div>
+            <div class="q">我之前线下店体验西昊这个，也是觉得，怎么都在晃的感觉，就买了清闲。<span class="qsrc">西昊小红书</span></div>
+            <div class="q">西昊的支撑性比较好，7D 扶手的可调节性好，别的就都比不上清闲了，特别是 160 度后躺的时候，后背稳定性很差。<span class="qsrc">西昊小红书</span></div>
+            <div class="q">西昊就是如果不要座椅通风可以秒冲，需要座椅通风就去清闲。<span class="qsrc">西昊小红书</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="callout n">
+        <b>这一页的事实是什么</b><br>
+        在<b>清闲之外的品牌自己的笔记下</b>，每 5 条评论就有约 1 条主动提到清闲；
+        而黑白调笔记下提西昊占 12.1%，西昊笔记下提黑白调只占 1.3%。
+        <b>消费者在讨论这两个品牌时，默认的对标对象是清闲。</b>
+      </div>
+    </div>
+  </div>
+  <div class="src">数据源：黑白调小红书 685 条去重评论 + 西昊小红书 308 条去重评论。口径：出现品牌名即计 1 条；话题分类为关键词匹配，一条评论可同时命中多个话题。</div>
+</section>
+
+<!-- ===== 9 海外 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 12 部分 · 海外市场</div>
+    <h2>美国站 16 条评价：星级、关注点与差评原因</h2>
+    <p class="sub">样本仅 16 条，只作方向参考，不足以代表整体。</p>
+  </div>
+
+  <div class="cols">
+    <div class="stack">
+      <div class="card">
+        <h3>星级分布</h3>
+        <table>
+          <thead><tr><th style="width:70px">星级</th><th colspan="2" class="num" style="width:50%">条数</th><th class="num">占比</th></tr></thead>
+          <tbody>
+            <tr><td>5 星</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:100%"></div></div></div></td><td class="num">9</td><td class="num">56.3%</td></tr>
+            <tr><td>4 星</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:44%"></div></div></div></td><td class="num">4</td><td class="num">25.0%</td></tr>
+            <tr><td>3 星</td><td><div class="barcell"><div class="bartrack"><div class="mini" style="width:11%"></div></div></div></td><td class="num">1</td><td class="num">6.3%</td></tr>
+            <tr><td>2 星</td><td><div class="barcell"><div class="bartrack"></div></div></td><td class="num">0</td><td class="num">0%</td></tr>
+            <tr><td>1 星</td><td><div class="barcell"><div class="bartrack"><div class="mini bad" style="width:22%"></div></div></div></td><td class="num">2</td><td class="num">12.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:13px;margin-top:10px"><b>平均 4.13 分。</b>无 2 星，两条 1 星分别是"通风不像宣传那样能制冷"和"运费太贵"。</p>
+      </div>
+      <div class="card soft">
+        <h3>与国内版本的差异</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:78px">产品名</td><td>Libernovo <b>Omni Pro</b>（国内称 OC1 Pro）</td></tr>
+            <tr><td>售价</td><td>$1,000（含脚踏）</td></tr>
+            <tr><td>渠道</td><td>Kickstarter 众筹起家，后进入亚马逊</td></tr>
+            <tr><td>主打人群</td><td>学生 / 游戏玩家 / 居家办公</td></tr>
+            <tr><td>多出的认证</td><td>北美办公家具安全认证、低挥发物认证</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h3>海外用户最认可什么</h3>
+        <ol class="steps">
+          <li><b>座垫通风</b>——被多条评价称为"最有用的功能""游戏规则改变者"。</li>
+          <li><b>后仰 + 脚踏的午休组合</b>。</li>
+          <li><b>组装简单</b>——多数评价提到 20–40 分钟完成。</li>
+        </ol>
+        <details>
+          <summary>展开：4 条用户原话</summary>
+          <div class="body">
+            <div class="q v">我最喜欢的是它的风扇功能。一开始我以为自己用不上，但它的通风效果真的太棒了。<span class="qsrc">5★</span></div>
+            <div class="q v">内置风扇彻底改变了游戏规则。<span class="qsrc">5★</span></div>
+            <div class="q v">我平时坐几个小时后容易觉得热，这款椅子有两档风速，让我更容易保持舒适。<span class="qsrc">5★</span></div>
+            <div class="q v">安装不到 20 分钟，无需阅读说明书。<span class="qsrc">5★</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>3 条低星评价，2 条与产品无关</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:44px"><span class="badge p0">1★</span></td><td><b>产品相关：</b>「椅子并没有像卖家所说的那样制冷」</td></tr>
+            <tr><td><span class="badge p0">1★</span></td><td><b>物流：</b>「运到波多黎各要 2,000 美元运费？这比椅子本身还贵」</td></tr>
+            <tr><td><span class="badge p1">3★</span></td><td><b>发货与客服：</b>脚踏没随箱到，且包装上未注明"共两件，这是第一件"；客服电话转人工后立即挂断</td></tr>
+            <tr><td><span class="badge p2">4★</span></td><td><b>客服：</b>椅子很棒，但退货时未给足运单，还试图从退款中扣除 277 美元</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="font-size:13px;margin-top:10px">
+          与国内一致：<b>低星评价集中在发货、退换货与客服环节，而不是产品质量</b>。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="src">数据源：清闲亚马逊评价 16 条（美国站，中文翻译）</div>
+</section>
+
+<!-- ===== 10 结论 ===== -->
+<section class="slide">
+  <div class="slide-head">
+    <div class="eyebrow">第 13 部分 · 结论</div>
+    <h2>数据支持的 10 条结论</h2>
+    <p class="sub">每条结论后面标注了支撑它的数据，可直接回溯原文。不含主观推断。</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="width:34px">#</th><th style="width:270px">结论</th><th style="width:190px">数据支撑</th><th>数据来源</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><b>"热"是体量最大的产品类话题</b></td>
+        <td>提及 588 条（11.8%），是唯一进入前五的负面倾向话题</td>
+        <td>平台评价 5,000 条</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><b>通风只覆盖座垫，椅背没有</b></td>
+        <td>有用户在问大家与评价中反复确认"通风只有屁股那里"</td>
+        <td>问大家 + 平台评价</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><b>用户谈论"热"的频率是谈论"电动调节"的 2.8 倍</b></td>
+        <td>热 588 条 vs 电动调节 212 条</td>
+        <td>平台评价 5,000 条</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><b>腰托的支撑位置被明确指出"偏高、顶到背"</b></td>
+        <td>3 条差评 + 站外多条独立复现；含一条对机械结构的完整描述</td>
+        <td>平台评价 + 小红书</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><b>"选 45 还是 48"是买前第一大障碍</b></td>
+        <td>问大家 70 条提问（18.6%），且回答互相矛盾；48cm 销量是 45cm 的 2.8 倍</td>
+        <td>问大家 377 条 + SKU 数据</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><b>差评主要由非产品因素驱动</b></td>
+        <td>71 条差评中 51 条含服务/交易类关键词（71.8%），仅 20 条为纯产品问题</td>
+        <td>平台评价 71 条差评逐条归类</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><b>客服是差评第一大来源</b></td>
+        <td>29 条差评提到客服/售后，占全部差评的 40.8%；该话题差评占比 17.5%（基准 1.42%）</td>
+        <td>平台评价</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><b>退货运费是被反复提及的交易痛点</b></td>
+        <td>17 条差评，该话题差评占比 37.8%</td>
+        <td>平台评价</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><b>海外用户对同一产品的评价更集中于功能本身</b></td>
+        <td>16 条评价平均 4.13 分，唯一的产品类低星是"通风不像宣传那样能制冷"；其余低星均为服务</td>
+        <td>亚马逊评价 16 条</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><b>四家在"坐深可调"上清闲是唯一没有的</b></td>
+        <td>官方商品页对照：清闲不可调，黑白调/西昊/傲风均可调</td>
+        <td>四家官方商品页</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cols" style="margin-top:16px">
+    <div class="callout n">
+      <b>数据完整度</b><br>
+      已纳入统计：清闲平台评价 5,000 条 · 问大家 377 条 · 小红书 658 条 · 亚马逊 16 条 · 黑白调评价 182 条 · 黑白调小红书 685 条 · 西昊小红书 308 条 · 竞品问大家 17 条。共 7,243 条。<br>
+      <b>西昊 H300 Pro</b>：该品牌平台上基本没有评价数据与问大家，因此西昊的<b>抱怨条数</b>只来自其站外评论（308 条中 61 条提到清闲），不参与平台评价的抱怨排序。
+    </div>
+    <div class="callout n">
+      <b>本报告未做的判断</b><br>
+      本版只呈现数据事实，未给出"应该怎么做产品"的建议。若需要，可把这 10 条结论转成具体的产品参数建议。
+    </div>
+  </div>
+  <div class="src">口径：所有频次均为"提到该内容的反馈条数"，一条反馈只计一次。关键词表见第 1 部分。</div>
+</section>
+
+</main>
+
+<nav id="hud">
+  <div id="dots"><button class="dot on" type="button" aria-label="第 1 页"></button><button class="dot" type="button" aria-label="第 2 页"></button><button class="dot" type="button" aria-label="第 3 页"></button><button class="dot" type="button" aria-label="第 4 页"></button><button class="dot" type="button" aria-label="第 5 页"></button><button class="dot" type="button" aria-label="第 6 页"></button><button class="dot" type="button" aria-label="第 7 页"></button><button class="dot" type="button" aria-label="第 8 页"></button><button class="dot" type="button" aria-label="第 9 页"></button><button class="dot" type="button" aria-label="第 10 页"></button><button class="dot" type="button" aria-label="第 11 页"></button><button class="dot" type="button" aria-label="第 12 页"></button><button class="dot" type="button" aria-label="第 13 页"></button><button class="dot" type="button" aria-label="第 14 页"></button></div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <span id="pager">1 / 14</span>
+    <button id="themebtn" type="button">深色</button>
+  </div>
+</nav>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dots = document.getElementById('dots');
+  var pager = document.getElementById('pager');
+  var progress = document.getElementById('progress');
+  var i = 0;
+
+  slides.forEach(function(_, n){
+    var b = document.createElement('button');
+    b.className = 'dot'; b.type = 'button';
+    b.setAttribute('aria-label', '第 ' + (n+1) + ' 页');
+    b.addEventListener('click', function(){ go(n); });
+    dots.appendChild(b);
+  });
+  var dotEls = Array.prototype.slice.call(dots.children);
+
+  function go(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('active', k === i); });
+    dotEls.forEach(function(d, k){ d.classList.toggle('on', k === i); });
+    pager.textContent = (i+1) + ' / ' + slides.length;
+    progress.style.width = ((i+1) / slides.length * 100) + '%';
+    slides[i].scrollTop = 0;
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(i+1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(i-1); }
+    else if (e.key === 'Home') { go(0); }
+    else if (e.key === 'End') { go(slides.length-1); }
+  });
+
+  var btn = document.getElementById('themebtn');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    btn.textContent = (t === 'dark') ? '浅色' : '深色';
+    try { localStorage.setItem('qx-theme', t); } catch(err){}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('qx-theme'); } catch(err){}
+  if (saved) { setTheme(saved); }
+  else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { setTheme('dark'); }
+  btn.addEventListener('click', function(){
+    setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  go(0);
+})();
+</script>
+
+
+</body></html>
